@@ -19,47 +19,56 @@ public class Plot {
         return x;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
     public int getY() {
         return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public int getWidth() {
         return width;
     }
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
     public int getDepth() {
         return depth;
     }
 
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
     public boolean overlaps(Plot plot) {
-        int x1 = this.x;
-        int x2 = this.x + this.width;
-        int y1 = this.y;
-        int y2 = this.y + this.depth;
-        
-        int x3 = plot.x;
-        int x4 = plot.x + plot.width;
-        int y3 = plot.y;
-        int y4 = plot.y + plot.depth;
-        
-        return !(x1 >= x4 || x2 <= x3 || y1 >= y4 || y2 <= y3);
+        // Check if this plot overlaps with the provided plot
+        boolean xOverlap = this.x < plot.x + plot.width && this.x + this.width > plot.x;
+        boolean yOverlap = this.y < plot.y + plot.depth && this.y + this.depth > plot.y;
+
+        // Check if one plot is entirely inside the other
+        boolean xInside = this.x >= plot.x && this.x + this.width <= plot.x + plot.width;
+        boolean yInside = this.y >= plot.y && this.y + this.depth <= plot.y + plot.depth;
+
+        return (xOverlap && yOverlap) || (xInside && yInside);
     }
 
     public boolean encompasses(Plot plot) {
-        int x1 = this.x;
-        int x2 = this.x + this.width;
-        int y1 = this.y;
-        int y2 = this.y + this.depth;
+        // Check if this plot encompasses the provided plot
+        boolean xEncompass = this.x <= plot.x && this.x + this.width >= plot.x + plot.width;
+        boolean yEncompass = this.y <= plot.y && this.y + this.depth >= plot.y + plot.depth;
 
-        int x3 = plot.x;
-        int x4 = plot.x + plot.width;
-        int y3 = plot.y;
-        int y4 = plot.y + plot.depth;
-
-        return x1 <= x3 && x2 >= x4 && y1 <= y3 && y2 >= y4;
+        return xEncompass && yEncompass;
     }
 
+    @Override
     public String toString() {
-        return "(X, Y): (" + x + ", " + y + ")\nWidth: " + width + "\nDepth: " + depth;
+        return x + "," + y + "," + width + "," + depth;
     }
 }
